@@ -27,3 +27,5 @@ Route::post('check_key','SendController@checkUserKey');
 Route::post('set_key','SettingsController@setApiKey');
 
 Route::get('get_rates','CurrencyController@getPairs');
+Route::get('get_currencies','CurrencyController@getCurrencies');
+Route::post('add_pair','CurrencyController@addPair');

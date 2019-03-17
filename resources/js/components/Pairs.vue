@@ -8,6 +8,8 @@
       {{counter}}
     </div>
 
+    <router-link :to="{ path: 'add'}">New Pair</router-link>
+    
     <table class="table" v-if="pairs.hasOwnProperty('source_currencies')">
       <thead>
         <tr>

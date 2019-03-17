@@ -23,7 +23,12 @@ let routes =[
     path: '/pairs',
     component: require('./components/Pairs').default
   },
+  {
+    path: '/add',
+    component: require('./components/Add').default
+  },
   
+
 ]
 
 
