@@ -128,6 +128,8 @@ const axios = require('axios');
                 password: this.password
               }).then( response => {
                 localStorage.setItem('token', response.data.auth.original.access_token);
+                // noway for changing the nav links
+                location.reload();
                 this.$router.push({ path: 'pairs' });
               })
               .catch( error => {

@@ -11,6 +11,8 @@ class SendController extends Controller
     $this->middleware('jwt.auth');
   }
 
+
+// send request to currency layer to validate the key
   public function checkUserKey(Request $request){
 
     $key = $request->key;

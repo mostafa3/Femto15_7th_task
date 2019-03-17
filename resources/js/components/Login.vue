@@ -106,11 +106,19 @@ const axios = require('axios');
 
 
             submitted(){
+              // this.$store.dispatch('login',{
+              //   email: this.email,
+              //   password: this.password
+              // }).then( response => {
+              //   this.$router.push({ path: 'pairs' });
+              // });
+
               axios.post('api/login',{
                 email: this.email,
                 password: this.password
               }).then( response => {
                 console.log(response.data);
+                // save the token in the localStorage
                 localStorage.setItem('token', response.data.auth.original.access_token);
                 this.$router.push({ path: 'pairs' });
               })
@@ -237,10 +245,13 @@ const axios = require('axios');
                 email: this.email,
                 password: this.password
               }).then( response => {
-                console.log(response.data);
+                // save the token and the api_key in the localStorage
+
                 localStorage.setItem('token', response.data.auth.original.access_token);
                 localStorage.setItem('key', response.data.api_key);
-                console.log(response.data.api_key);
+                // noway for changing the nav links
+                location.reload();
+                // redirect to index
                 this.$router.push({ path: 'pairs' });
               })
               .catch( error => {
@@ -254,4 +265,6 @@ const axios = require('axios');
 
 
     }
+
+
 </script>

@@ -33,6 +33,7 @@
       {{counter}}
     </div>
 
+<!--  New Pair link -->
     <router-link :to="{ path: 'add'}">New Pair</router-link>
 
     <table class="table" v-if="pairs.hasOwnProperty('source_currencies')">
@@ -45,6 +46,7 @@
         </tr>
       </thead>
       <tbody>
+
         <tr v-for="(source_currency, index) in pairs.source_currencies">
           <td>{{source_currency['short_name']}}</td>
           <td>{{pairs['to_currencies'][index]['short_name']}}</td>
@@ -52,14 +54,16 @@
           <td>
             {{source_currency['id']}} - {{pairs['to_currencies'][index]['id']}}
 
-
+            <!-- Edit Link -->
             <router-link :to="{ path: '/edit?source=' + source_currency['id'] + '&to=' + pairs['to_currencies'][index]['id'] }">Edit</router-link>
-             - <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" @click="prepareDelete(source_currency.id, pairs['to_currencies'][index].id)">
+            <!-- Delete Button -->
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" @click="prepareDelete(source_currency.id, pairs['to_currencies'][index].id)">
                Delete
              </button>
 
           </td>
         </tr>
+
       </tbody>
     </table>
 
@@ -113,13 +117,18 @@ const axios = require('axios');
       },
 
           mounted (){
+            // guest should't be here
+            // user who has no key shouldn't be here
             this.redirectIfGuest();
             this.redirectToSetKey();
+            // get user pairs
             this.getPairs();
+            // start counting to schedule request
             setInterval(()=>{this.count()}, 1000);
           },
           methods:{
 
+            // start from 3s and when reach 0 , fire the request
             count(){
               this.counter--;
               if(this.counter < 0){
@@ -128,6 +137,7 @@ const axios = require('axios');
               }
             },
 
+            // send a request to get user's pairs and the rates for each pair
             getPairs(){
               axios.get('api/get_rates',{
                   headers: {
@@ -142,11 +152,14 @@ const axios = require('axios');
               })
             },
 
+            // catch the pair ids and the modal will assure the user
             prepareDelete(source, to){
               this.source_delete = source;
               this.to_delete = to;
             },
 
+            // the user is sure for deletion
+            // send request to delete
             executDelete(){
               axios.post('api/delete_pair',{
                 source: this.source_delete,

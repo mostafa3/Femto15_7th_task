@@ -5,10 +5,11 @@ import Vue from 'vue';
 
 import axios from 'axios';
 
+import Vuex from 'vuex';
 window.Vue = Vue;
 
 window.axios = axios;
-
+Vue.use(Vuex);
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This

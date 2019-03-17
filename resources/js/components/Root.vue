@@ -47,14 +47,19 @@
 
 import router from '../routes';
 
-
+import {store} from '../store';
 
     export default {
 
 
-     router: router,
+     router :router,
+     store,
 
      mounted(){
+       // kick the user to pairs page
+       // if he's authenticated the pair page will kicks him to login
+       // if he authenticated but no api_key will be kicked to key page
+       // or he can continue in pairs page
        this.$router.push({ path: 'pairs' });
      },
 
@@ -62,7 +67,11 @@ import router from '../routes';
 
 
        logout(){
+         // just remove the token from client side but it remains in the server
          localStorage.removeItem('token');
+         localStorage.removeItem('key');
+         // noway for changing the nav links
+         location.reload();
          this.$router.push({ path: 'login' });
          // axios.post('api/logout',{
          //     headers: {
@@ -81,19 +90,22 @@ import router from '../routes';
 
 }
 
-
+// share globally
 Vue.mixin({
   computed:{
 
+    // i'm trying here to make computed on the token states in localStorage
+    // so application can react with users and change nav links
+    // according for there status but it doesn't work , the browser must be refreshed
     isLoggedIn(){
-      var token = localStorage.getItem('token') || '';
-      if(!token)
-        return false;
-      return true;
+
+      return localStorage.getItem('token') != null;
+      // return this.$store.getters.loggedIn;
     },
 
   },
   methods: {
+
 
     redirectIfGuest(status){
       if(!this.isLoggedIn)
@@ -102,7 +114,7 @@ Vue.mixin({
 
     // if key is not provided
     redirectToSetKey(){
-      var key = localStorage.getItem('key') || '';
+      var key = localStorage.getItem('key');
       if(!key)
         this.$router.push({ path: 'key' });
     },

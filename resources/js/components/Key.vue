@@ -52,7 +52,7 @@
 
 const axios = require('axios');
 
-
+ // error feedback for api key
  class Errors  {
    constructor(){
      this.errors = {}
@@ -91,32 +91,15 @@ const axios = require('axios');
         mounted (){
           this.redirectIfGuest();
         },
-        
+
           methods:{
 
-            saveUserKey(key){
-              axios.post('api/set_key',{
-                key: key,
-              },
-              {
-                headers: {
-                  'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                }
-              }).then( response => {
-                this.$router.push({ path: 'pairs' });
-                localStorage.setItem('key', response.data.api_key);
-              })
-              .catch( error => {
-                console.log(error.response);
-                // this.errors.record(error.response.data.errors);
-
-              })
-            },
-
+            // first we check for validity of this api key
+            // if it's valid , store it into the localStorage and database
             checkUserKey(){
 
               if(!this.key.trim().length){
-                // don't send
+                // don't send if empty
                 this.errors.record(
                   {
                     'key':['the key field is required']
@@ -134,6 +117,7 @@ const axios = require('axios');
                   'Authorization': 'Bearer '+localStorage.getItem('token'),
                 }
               }).then( response => {
+                // send request to save it
                 this.saveUserKey(this.key);
               })
               .catch( error => {
@@ -142,6 +126,27 @@ const axios = require('axios');
 
               })
             },
+
+            saveUserKey(key){
+              axios.post('api/set_key',{
+                key: key,
+              },
+              {
+                headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }
+              }).then( response => {
+                // save it too in the localStorage
+                localStorage.setItem('key', response.data.api_key);
+                this.$router.push({ path: 'pairs' });
+              })
+              .catch( error => {
+                console.log(error.response);
+                // this.errors.record(error.response.data.errors);
+
+              })
+            },
+
 
 
           }

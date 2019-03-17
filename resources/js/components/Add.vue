@@ -64,7 +64,7 @@
 
 const axios = require('axios');
 
-
+ // error feedback for currencies
  class Errors  {
    constructor(){
      this.errors = {}
@@ -105,12 +105,15 @@ const axios = require('axios');
       },
 
           mounted (){
+            // guest should't be here
+            // user who has no key shouldn't be here
             this.redirectIfGuest();
             this.redirectToSetKey();
             this.getCurrencies();
           },
           methods:{
 
+            // get currencies and put it into the dropdown menu
             getCurrencies(){
               axios.get('api/get_currencies',{
                 headers: {
@@ -138,6 +141,7 @@ const axios = require('axios');
                   'Authorization': 'Bearer '+localStorage.getItem('token'),
                 }
               }).then( response => {
+                // redirect to the index
                 this.$router.push({ path: 'pairs' });
               })
               .catch( error => {
