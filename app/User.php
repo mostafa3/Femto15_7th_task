@@ -47,6 +47,21 @@ class User extends Authenticatable implements JWTSubject
         }
     }
 
+    public function key(){
+      return $this->api_key;
+    }
+
+    public function update_key($key){
+      $this->update(['api_key' => $key]);
+    }
+
+    public function valid_key($api_key){
+      $this->update_key($api_key);
+    }
+
+    public function invalid_key(){
+      $this->update_key('');
+    }
 
 
 

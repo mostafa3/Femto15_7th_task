@@ -15,6 +15,11 @@ let routes =[
     path: '/register',
     component: require('./components/Register').default
   },
+  {
+    path: '/key',
+    component: require('./components/Key').default
+  },
+  
 ]
 
 

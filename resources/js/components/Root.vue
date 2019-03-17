@@ -20,7 +20,13 @@
             <li class="nav-item active">
               <router-link to="register" class="nav-link" >Register</router-link>
             </li>
+            <li class="nav-item active">
+              <router-link to="key" class="nav-link" >Set Key </router-link>
+            </li>
+
           </ul>
+
+            <a class="nav-link" href="#">Logout</a>
 
         </div>
       </nav>
@@ -40,18 +46,19 @@ import router from '../routes';
 
 import login from './Login'
 import register from './Register'
+import key from './Key'
+
 
     export default {
+
       components: {
         login,
         register,
+        key,
+
       },
      router: router,
 
-        mounted() {
-            console.log('Component mounted.')
-        },
-
-    }
+}
 
 </script>

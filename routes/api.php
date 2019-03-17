@@ -18,6 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/register', 'ApiAuthController@register');
-
 Route::post('/login', 'ApiAuthController@login');
 Route::post('/logout', 'ApiAuthController@logout');
+
+
+Route::post('check_key','SendController@checkUserKey');
+
+Route::post('set_key','SettingsController@setApiKey');

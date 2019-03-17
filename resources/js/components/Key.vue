@@ -1,0 +1,149 @@
+<template>
+  <div class="container">
+      <div class="row justify-content-center">
+          <div class="col-md-8">
+              <div class="card">
+                  <div class="card-header">Set Key</div>
+
+
+                  <div class="card-body">
+                      <form @submit.prevent="checkUserKey" @keydown="errors.clear($event.target.name)">
+
+
+                          <div class="form-group row">
+                              <label for="key" class="col-sm-4 col-form-label text-md-right">Key</label>
+
+                              <div class="col-md-6">
+                                  <input type="text" id="key" name="key" v-model="key" :class="{'is-invalid':errors.has('key'), 'form-control': 'true'}"  autofocus >
+
+
+                                      <span class="invalid-feedback" v-if="errors.has('key')">
+                                          <strong v-text="errors.get('key')"></strong>
+                                      </span>
+
+
+                              </div>
+                          </div>
+
+
+
+
+
+                          <div class="form-group row mb-0">
+                              <div class="col-md-8 offset-md-4">
+                                  <button type="submit" class="btn btn-primary">
+                                      Save
+                                  </button>
+
+
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</template>
+
+<script>
+
+// import router from '../routes';
+
+const axios = require('axios');
+
+
+ class Errors  {
+   constructor(){
+     this.errors = {}
+   }
+
+   get(field) {
+     if (this.errors[field])
+      return this.errors[field][0]
+   }
+
+   record(errors) {
+      this.errors = errors
+    }
+
+    has(field){
+        return this.errors.hasOwnProperty(field) ;
+    }
+
+    clear(field) {
+      // console.log(field);
+
+        delete this.errors[field];
+    }
+ }
+
+    export default {
+      name: 'key',
+
+      data(){
+        return {
+          key: '',
+          errors: new Errors,
+        }
+      },
+
+      mounted(){
+        console.log(localStorage.getItem(token));
+      },
+          methods:{
+
+            saveUserKey(key){
+              axios.post('api/set_key',{
+                key: key,
+              },
+              {
+                headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }
+              }).then( response => {
+                console.log(response.data.api_key);
+              })
+              .catch( error => {
+                console.log(error.response);
+                // this.errors.record(error.response.data.errors);
+
+              })
+            },
+
+            checkUserKey(){
+
+              if(!this.key.trim().length){
+                // don't send
+                this.errors.record(
+                  {
+                    'key':['the key field is required']
+                  }
+                );
+
+                return false;
+              }
+
+              axios.post('api/check_key',{
+                key: this.key,
+              },
+              {
+                headers: {
+                  'Authorization': 'Bearer '+localStorage.getItem('token'),
+                }
+              }).then( response => {
+                this.saveUserKey(this.key);
+              })
+              .catch( error => {
+                console.log(error.response);
+                this.errors.record(error.response.data.errors);
+
+              })
+            },
+
+
+          }
+
+
+    }
+</script>
