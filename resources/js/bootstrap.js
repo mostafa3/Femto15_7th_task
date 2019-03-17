@@ -3,11 +3,11 @@ window._ = require('lodash');
 
 import Vue from 'vue';
 
-
+import axios from 'axios';
 
 window.Vue = Vue;
 
-
+window.axios = axios;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

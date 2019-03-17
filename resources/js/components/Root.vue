@@ -29,7 +29,7 @@
 
           </ul>
 
-            <a class="nav-link" href="#">Logout</a>
+            <a class="nav-link" href="#" @click.prevent="logout" >Logout</a>
 
         </div>
       </nav>
@@ -47,20 +47,33 @@
 
 import router from '../routes';
 
-import login from './Login'
-import register from './Register'
-import key from './Key'
 
 
     export default {
 
-      components: {
-        login,
-        register,
-        key,
 
-      },
      router: router,
+
+     methods:{
+
+
+       logout(){
+         localStorage.removeItem('token');
+         this.$router.push({ path: 'login' });
+         // axios.post('api/logout',{
+         //     headers: {
+         //       'Authorization': 'Bearer '+localStorage.getItem('token'),
+         //     }
+         //   }).then( response => {
+         // })
+         // .catch( error => {
+         //   console.log(error.response);
+         //   // this.errors.record(error.response.data.errors);
+         //
+         // });
+
+       }
+     },
 
 }
 

@@ -8,11 +8,10 @@ use JWTFactory;
 use Auth;
 use App\User;
 
-class ApiAuthController extends Controller
-{
+class ApiAuthController extends Controller{
 
-  public function register(Request $request)
-  {
+  public function register(Request $request){
+
     $request = $this->validateRequest($request,'register');
 
     $user = User::create($request);
@@ -21,6 +20,8 @@ class ApiAuthController extends Controller
 
     return $this->respondWithToken($token);
   }
+
+
 
   public function login(Request $request)
     {
@@ -37,6 +38,8 @@ class ApiAuthController extends Controller
           'auth' => $this->respondWithToken($token),
         ],200);
     }
+
+
 
     public function logout()
     {

@@ -2861,9 +2861,6 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../routes */ "./resources/js/routes.js");
-/* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login */ "./resources/js/components/Login.vue");
-/* harmony import */ var _Register__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Register */ "./resources/js/components/Register.vue");
-/* harmony import */ var _Key__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Key */ "./resources/js/components/Key.vue");
 //
 //
 //
@@ -2909,17 +2906,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
-
-
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    login: _Login__WEBPACK_IMPORTED_MODULE_1__["default"],
-    register: _Register__WEBPACK_IMPORTED_MODULE_2__["default"],
-    key: _Key__WEBPACK_IMPORTED_MODULE_3__["default"]
-  },
-  router: _routes__WEBPACK_IMPORTED_MODULE_0__["default"]
+  router: _routes__WEBPACK_IMPORTED_MODULE_0__["default"],
+  methods: {
+    logout: function logout() {
+      localStorage.removeItem('token');
+      this.$router.push({
+        path: 'login'
+      }); // axios.post('api/logout',{
+      //     headers: {
+      //       'Authorization': 'Bearer '+localStorage.getItem('token'),
+      //     }
+      //   }).then( response => {
+      // })
+      // .catch( error => {
+      //   console.log(error.response);
+      //   // this.errors.record(error.response.data.errors);
+      //
+      // });
+    }
+  }
 });
 
 /***/ }),
@@ -39146,9 +39153,20 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("Logout")
-            ])
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.logout($event)
+                  }
+                }
+              },
+              [_vm._v("Logout")]
+            )
           ]
         )
       ]
@@ -53988,9 +54006,13 @@ var app = new Vue({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
+
 window.Vue = vue__WEBPACK_IMPORTED_MODULE_0___default.a;
+window.axios = axios__WEBPACK_IMPORTED_MODULE_1___default.a;
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
