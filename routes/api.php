@@ -31,3 +31,4 @@ Route::get('get_currencies','CurrencyController@getCurrencies');
 
 Route::post('add_pair','CurrencyController@addPair');
 Route::post('update_currency','CurrencyController@updateCurrency');
+Route::post('delete_pair','CurrencyController@deletePair');

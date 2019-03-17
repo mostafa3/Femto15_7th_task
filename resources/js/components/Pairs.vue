@@ -4,6 +4,31 @@
   <div class="container">
 
 
+
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Delete</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            You want to delete this pair
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" @click="executDelete">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
     <div>
       {{counter}}
     </div>
@@ -29,7 +54,9 @@
 
             {{source_currency['id']}} - {{pairs['to_currencies'][index]['id']}}
             <router-link :to="{ path: '/edit?source=' + source_currency['id'] + '&to=' + pairs['to_currencies'][index]['id'] }">Edit</router-link>
-             - Delete
+             - <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" @click="prepareDelete(source_currency.id, pairs['to_currencies'][index].id)">
+               Delete
+             </button>
 
           </td>
         </tr>
@@ -78,6 +105,9 @@ const axios = require('axios');
         return {
           counter:3,
           pairs: [],
+          source_delete: 0,
+          to_delete: 0,
+
           errors: new Errors,
         }
       },
@@ -109,6 +139,35 @@ const axios = require('axios');
 
               })
             },
+
+            prepareDelete(source, to){
+              this.source_delete = source;
+              this.to_delete = to;
+            },
+
+            executDelete(){
+              axios.post('api/delete_pair',{
+                source: this.source_delete,
+                to: this.to_delete
+              },{
+                headers: {
+                  'Authorization': 'Bearer '+localStorage.getItem('token'),
+                }
+              }).then( response => {
+
+                this.counter = 0;
+
+                this.source_delete = 0;
+                this.to_delete = 0;
+                  $('#deleteModal').modal('hide');
+              })
+              .catch( error => {
+                console.log(error.response);
+                // this.errors.record(error.response.data.errors);
+
+              })
+            },
+
 
 
 

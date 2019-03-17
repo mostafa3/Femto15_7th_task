@@ -2559,6 +2559,33 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // import router from '../routes';
 var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
@@ -2603,6 +2630,8 @@ function () {
     return {
       counter: 3,
       pairs: [],
+      source_delete: 0,
+      to_delete: 0,
       errors: new Errors()
     };
   },
@@ -2634,6 +2663,29 @@ function () {
         _this2.pairs = response.data;
       }).catch(function (error) {
         console.log(error.response);
+      });
+    },
+    prepareDelete: function prepareDelete(source, to) {
+      this.source_delete = source;
+      this.to_delete = to;
+    },
+    executDelete: function executDelete() {
+      var _this3 = this;
+
+      axios.post('api/delete_pair', {
+        source: this.source_delete,
+        to: this.to_delete
+      }, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }).then(function (response) {
+        _this3.counter = 0;
+        _this3.source_delete = 0;
+        _this3.to_delete = 0;
+        $('#deleteModal').modal('hide');
+      }).catch(function (error) {
+        console.log(error.response); // this.errors.record(error.response.data.errors);
       });
     }
   }
@@ -38582,6 +38634,56 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "deleteModal",
+            tabindex: "-1",
+            role: "dialog",
+            "aria-labelledby": "deleteModalLabel",
+            "aria-hidden": "true"
+          }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "modal-dialog", attrs: { role: "document" } },
+            [
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _vm._v("\n          You want to delete this pair\n        ")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      attrs: { type: "button", "data-dismiss": "modal" }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "button" },
+                      on: { click: _vm.executDelete }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
+              ])
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
       _c("div", [_vm._v("\n    " + _vm._s(_vm.counter) + "\n  ")]),
       _vm._v(" "),
       _c("router-link", { attrs: { to: { path: "add" } } }, [
@@ -38590,7 +38692,7 @@ var render = function() {
       _vm._v(" "),
       _vm.pairs.hasOwnProperty("source_currencies")
         ? _c("table", { staticClass: "table" }, [
-            _vm._m(0),
+            _vm._m(1),
             _vm._v(" "),
             _c(
               "tbody",
@@ -38647,7 +38749,27 @@ var render = function() {
                         },
                         [_vm._v("Edit")]
                       ),
-                      _vm._v("\n           - Delete\n\n        ")
+                      _vm._v("\n           - "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          attrs: {
+                            type: "button",
+                            "data-toggle": "modal",
+                            "data-target": "#deleteModal"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.prepareDelete(
+                                source_currency.id,
+                                _vm.pairs["to_currencies"][index].id
+                              )
+                            }
+                          }
+                        },
+                        [_vm._v("\n             Delete\n           ")]
+                      )
                     ],
                     1
                   )
@@ -38662,6 +38784,31 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "deleteModalLabel" } },
+        [_vm._v("Delete")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
