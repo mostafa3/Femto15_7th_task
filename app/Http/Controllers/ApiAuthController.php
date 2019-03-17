@@ -6,14 +6,20 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use JWTFactory;
 use Auth;
-
+use App\User;
 
 class ApiAuthController extends Controller
 {
 
   public function register(Request $request)
   {
+    $request = $this->validateRequest($request,'register');
 
+    $user = User::create($request);
+
+    $token = JWTAuth::attempt(request()->only(['email','password']));
+
+    return $this->respondWithToken($token);
   }
 
   public function login(Request $request)
@@ -56,8 +62,13 @@ class ApiAuthController extends Controller
       ]);
 
       if($type == 'register'){
-        $request->validate(['name'=>'required']);
+        $request->validate([
+          'name' => 'required|min:3',
+          'email' => 'unique:users,email'
+         ]);
       }
+
+      return $request->all();
     }
 
 }
