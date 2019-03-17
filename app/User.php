@@ -63,6 +63,14 @@ class User extends Authenticatable implements JWTSubject
       $this->update_key('');
     }
 
+    public function source_currencies(){
+      return $this->belongsToMany('App\Currency','user_currency','user_id','currency_1_id')->withPivot('currency_2_id');
+    }
+
+    public function to_currencies(){
+      return $this->belongsToMany('App\Currency','user_currency','user_id','currency_2_id')->withPivot('currency_1_id');
+    }
+
 
 
 

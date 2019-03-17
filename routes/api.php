@@ -25,3 +25,5 @@ Route::post('/logout', 'ApiAuthController@logout');
 Route::post('check_key','SendController@checkUserKey');
 
 Route::post('set_key','SettingsController@setApiKey');
+
+Route::get('get_rates','CurrencyController@getPairs');

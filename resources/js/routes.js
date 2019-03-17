@@ -19,6 +19,10 @@ let routes =[
     path: '/key',
     component: require('./components/Key').default
   },
+  {
+    path: '/pairs',
+    component: require('./components/Pairs').default
+  },
   
 ]
 

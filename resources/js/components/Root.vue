@@ -23,6 +23,9 @@
             <li class="nav-item active">
               <router-link to="key" class="nav-link" >Set Key </router-link>
             </li>
+            <li class="nav-item active">
+              <router-link to="pairs" class="nav-link" >Pairs</router-link>
+            </li>
 
           </ul>
 
