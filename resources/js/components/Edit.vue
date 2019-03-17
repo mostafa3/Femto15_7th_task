@@ -104,6 +104,8 @@ const axios = require('axios');
       },
 
           mounted (){
+            this.redirectIfGuest();
+            this.redirectToSetKey();
             this.getCurrencies();
           },
           methods:{
@@ -136,7 +138,9 @@ const axios = require('axios');
                 headers: {
                   'Authorization': 'Bearer '+localStorage.getItem('token'),
                 }
-              }).then( response => {})
+              }).then( response => {
+                this.$router.push({ path: 'pairs' });
+              })
               .catch( error => {
                 console.log(error.response.data.errors);
                 this.errors.record(error.response.data.errors);

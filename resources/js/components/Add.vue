@@ -105,6 +105,8 @@ const axios = require('axios');
       },
 
           mounted (){
+            this.redirectIfGuest();
+            this.redirectToSetKey();
             this.getCurrencies();
           },
           methods:{
@@ -115,7 +117,10 @@ const axios = require('axios');
                   'Authorization': 'Bearer '+localStorage.getItem('token'),
                 }
               }).then( response => {
+                // cach the response data into variables
                 this.currencies = response.data;
+
+                // put the first items into the beginning of the dropdown lists
                 this.source_currency = this.currencies.source_currencies[0].id;
                 this.to_currency = this.currencies.to_currencies[0].id;
               })
@@ -132,7 +137,9 @@ const axios = require('axios');
                 headers: {
                   'Authorization': 'Bearer '+localStorage.getItem('token'),
                 }
-              }).then( response => {})
+              }).then( response => {
+                this.$router.push({ path: 'pairs' });
+              })
               .catch( error => {
                 console.log(error.response.data.errors);
                 this.errors.record(error.response.data.errors);

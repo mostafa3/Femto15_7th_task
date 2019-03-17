@@ -15,21 +15,21 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <router-link to="login" class="nav-link" >Login</router-link>
+              <router-link to="login" v-show="!isLoggedIn"  class="nav-link" >Login</router-link>
             </li>
             <li class="nav-item active">
-              <router-link to="register" class="nav-link" >Register</router-link>
+              <router-link to="register" v-show="!isLoggedIn"  class="nav-link" >Register</router-link>
             </li>
             <li class="nav-item active">
-              <router-link to="key" class="nav-link" >Set Key </router-link>
+              <router-link to="key" v-show="isLoggedIn"  class="nav-link" >Set Key </router-link>
             </li>
             <li class="nav-item active">
-              <router-link to="pairs" class="nav-link" >Pairs</router-link>
+              <router-link to="pairs" v-show="isLoggedIn"  class="nav-link" >Pairs</router-link>
             </li>
 
           </ul>
 
-            <a class="nav-link" href="#" @click.prevent="logout" >Logout</a>
+            <a class="nav-link" href="#" v-show="isLoggedIn"  @click.prevent="logout" >Logout</a>
 
         </div>
       </nav>
@@ -54,6 +54,10 @@ import router from '../routes';
 
      router: router,
 
+     mounted(){
+       this.$router.push({ path: 'pairs' });
+     },
+
      methods:{
 
 
@@ -76,5 +80,36 @@ import router from '../routes';
      },
 
 }
+
+
+Vue.mixin({
+  computed:{
+
+    isLoggedIn(){
+      var token = localStorage.getItem('token') || '';
+      if(!token)
+        return false;
+      return true;
+    },
+
+  },
+  methods: {
+
+    redirectIfGuest(status){
+      if(!this.isLoggedIn)
+      this.$router.push({ path: 'login' });
+    },
+
+    // if key is not provided
+    redirectToSetKey(){
+      var key = localStorage.getItem('key') || '';
+      if(!key)
+        this.$router.push({ path: 'key' });
+    },
+
+
+  }
+})
+
 
 </script>

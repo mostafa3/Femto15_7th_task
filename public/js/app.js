@@ -1878,6 +1878,8 @@ function () {
     };
   },
   mounted: function mounted() {
+    this.redirectIfGuest();
+    this.redirectToSetKey();
     this.getCurrencies();
   },
   methods: {
@@ -1889,7 +1891,9 @@ function () {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       }).then(function (response) {
-        _this.currencies = response.data;
+        // cach the response data into variables
+        _this.currencies = response.data; // put the first items into the beginning of the dropdown lists
+
         _this.source_currency = _this.currencies.source_currencies[0].id;
         _this.to_currency = _this.currencies.to_currencies[0].id;
       }).catch(function (error) {
@@ -1906,7 +1910,11 @@ function () {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
-      }).then(function (response) {}).catch(function (error) {
+      }).then(function (response) {
+        _this2.$router.push({
+          path: 'pairs'
+        });
+      }).catch(function (error) {
         console.log(error.response.data.errors);
 
         _this2.errors.record(error.response.data.errors);
@@ -2041,6 +2049,8 @@ function () {
     };
   },
   mounted: function mounted() {
+    this.redirectIfGuest();
+    this.redirectToSetKey();
     this.getCurrencies();
   },
   methods: {
@@ -2069,7 +2079,11 @@ function () {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
-      }).then(function (response) {}).catch(function (error) {
+      }).then(function (response) {
+        _this2.$router.push({
+          path: 'pairs'
+        });
+      }).catch(function (error) {
         console.log(error.response.data.errors);
 
         _this2.errors.record(error.response.data.errors);
@@ -2185,15 +2199,17 @@ function () {
   name: 'key',
   data: function data() {
     return {
-      key: '',
+      key: localStorage.getItem('key'),
       errors: new Errors()
     };
   },
   mounted: function mounted() {
-    console.log(localStorage.getItem(token));
+    this.redirectIfGuest();
   },
   methods: {
     saveUserKey: function saveUserKey(key) {
+      var _this = this;
+
       axios.post('api/set_key', {
         key: key
       }, {
@@ -2201,13 +2217,17 @@ function () {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       }).then(function (response) {
-        console.log(response.data.api_key);
+        _this.$router.push({
+          path: 'pairs'
+        });
+
+        localStorage.setItem('key', response.data.api_key);
       }).catch(function (error) {
         console.log(error.response); // this.errors.record(error.response.data.errors);
       });
     },
     checkUserKey: function checkUserKey() {
-      var _this = this;
+      var _this2 = this;
 
       if (!this.key.trim().length) {
         // don't send
@@ -2224,11 +2244,11 @@ function () {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       }).then(function (response) {
-        _this.saveUserKey(_this.key);
+        _this2.saveUserKey(_this2.key);
       }).catch(function (error) {
         console.log(error.response);
 
-        _this.errors.record(error.response.data.errors);
+        _this2.errors.record(error.response.data.errors);
       });
     }
   }
@@ -2251,6 +2271,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+//
 //
 //
 //
@@ -2493,7 +2514,12 @@ function () {
       }).then(function (response) {
         console.log(response.data);
         localStorage.setItem('token', response.data.auth.original.access_token);
-        console.log(response.data);
+        localStorage.setItem('key', response.data.api_key);
+        console.log(response.data.api_key);
+
+        _this.$router.push({
+          path: 'pairs'
+        });
       }).catch(function (error) {
         _this.errors.record(error.response.data.errors);
       });
@@ -2638,6 +2664,8 @@ function () {
   mounted: function mounted() {
     var _this = this;
 
+    this.redirectIfGuest();
+    this.redirectToSetKey();
     this.getPairs();
     setInterval(function () {
       _this.count();
@@ -2680,6 +2708,7 @@ function () {
           'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       }).then(function (response) {
+        // reset the counter to get the new data
         _this3.counter = 0;
         _this3.source_delete = 0;
         _this3.to_delete = 0;
@@ -2840,6 +2869,10 @@ function () {
         password: this.password
       }).then(function (response) {
         localStorage.setItem('token', response.data.auth.original.access_token);
+
+        _this.$router.push({
+          path: 'pairs'
+        });
       }).catch(function (error) {
         console.log(error.response.data.errors);
 
@@ -2909,6 +2942,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   router: _routes__WEBPACK_IMPORTED_MODULE_0__["default"],
+  mounted: function mounted() {
+    this.$router.push({
+      path: 'pairs'
+    });
+  },
   methods: {
     logout: function logout() {
       localStorage.removeItem('token');
@@ -2925,6 +2963,29 @@ __webpack_require__.r(__webpack_exports__);
       //   // this.errors.record(error.response.data.errors);
       //
       // });
+    }
+  }
+});
+Vue.mixin({
+  computed: {
+    isLoggedIn: function isLoggedIn() {
+      var token = localStorage.getItem('token') || '';
+      if (!token) return false;
+      return true;
+    }
+  },
+  methods: {
+    redirectIfGuest: function redirectIfGuest(status) {
+      if (!this.isLoggedIn) this.$router.push({
+        path: 'login'
+      });
+    },
+    // if key is not provided
+    redirectToSetKey: function redirectToSetKey() {
+      var key = localStorage.getItem('key') || '';
+      if (!key) this.$router.push({
+        path: 'key'
+      });
     }
   }
 });
@@ -39106,7 +39167,18 @@ var render = function() {
                 [
                   _c(
                     "router-link",
-                    { staticClass: "nav-link", attrs: { to: "login" } },
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: !_vm.isLoggedIn,
+                          expression: "!isLoggedIn"
+                        }
+                      ],
+                      staticClass: "nav-link",
+                      attrs: { to: "login" }
+                    },
                     [_vm._v("Login")]
                   )
                 ],
@@ -39119,7 +39191,18 @@ var render = function() {
                 [
                   _c(
                     "router-link",
-                    { staticClass: "nav-link", attrs: { to: "register" } },
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: !_vm.isLoggedIn,
+                          expression: "!isLoggedIn"
+                        }
+                      ],
+                      staticClass: "nav-link",
+                      attrs: { to: "register" }
+                    },
                     [_vm._v("Register")]
                   )
                 ],
@@ -39132,7 +39215,18 @@ var render = function() {
                 [
                   _c(
                     "router-link",
-                    { staticClass: "nav-link", attrs: { to: "key" } },
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.isLoggedIn,
+                          expression: "isLoggedIn"
+                        }
+                      ],
+                      staticClass: "nav-link",
+                      attrs: { to: "key" }
+                    },
                     [_vm._v("Set Key ")]
                   )
                 ],
@@ -39145,7 +39239,18 @@ var render = function() {
                 [
                   _c(
                     "router-link",
-                    { staticClass: "nav-link", attrs: { to: "pairs" } },
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.isLoggedIn,
+                          expression: "isLoggedIn"
+                        }
+                      ],
+                      staticClass: "nav-link",
+                      attrs: { to: "pairs" }
+                    },
                     [_vm._v("Pairs")]
                   )
                 ],
@@ -39156,6 +39261,14 @@ var render = function() {
             _c(
               "a",
               {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.isLoggedIn,
+                    expression: "isLoggedIn"
+                  }
+                ],
                 staticClass: "nav-link",
                 attrs: { href: "#" },
                 on: {

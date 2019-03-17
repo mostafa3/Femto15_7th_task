@@ -126,7 +126,10 @@ const axios = require('axios');
                 name: this.name,
                 email: this.email,
                 password: this.password
-              }).then( response => {localStorage.setItem('token', response.data.auth.original.access_token)})
+              }).then( response => {
+                localStorage.setItem('token', response.data.auth.original.access_token);
+                this.$router.push({ path: 'pairs' });
+              })
               .catch( error => {
                 console.log(error.response.data.errors);
                 this.errors.record(error.response.data.errors);

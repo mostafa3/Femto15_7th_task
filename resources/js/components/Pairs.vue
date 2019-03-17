@@ -52,7 +52,7 @@
           <td>
             {{source_currency['id']}} - {{pairs['to_currencies'][index]['id']}}
 
-            {{source_currency['id']}} - {{pairs['to_currencies'][index]['id']}}
+
             <router-link :to="{ path: '/edit?source=' + source_currency['id'] + '&to=' + pairs['to_currencies'][index]['id'] }">Edit</router-link>
              - <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" @click="prepareDelete(source_currency.id, pairs['to_currencies'][index].id)">
                Delete
@@ -113,6 +113,8 @@ const axios = require('axios');
       },
 
           mounted (){
+            this.redirectIfGuest();
+            this.redirectToSetKey();
             this.getPairs();
             setInterval(()=>{this.count()}, 1000);
           },
@@ -155,6 +157,7 @@ const axios = require('axios');
                 }
               }).then( response => {
 
+                // reset the counter to get the new data
                 this.counter = 0;
 
                 this.source_delete = 0;

@@ -112,6 +112,7 @@ const axios = require('axios');
               }).then( response => {
                 console.log(response.data);
                 localStorage.setItem('token', response.data.auth.original.access_token);
+                this.$router.push({ path: 'pairs' });
               })
               .catch( error => {
                 this.errors.record(error.response.data.errors)
@@ -238,14 +239,15 @@ const axios = require('axios');
               }).then( response => {
                 console.log(response.data);
                 localStorage.setItem('token', response.data.auth.original.access_token);
-
-                console.log(response.data);
-
+                localStorage.setItem('key', response.data.api_key);
+                console.log(response.data.api_key);
+                this.$router.push({ path: 'pairs' });
               })
               .catch( error => {
                 this.errors.record(error.response.data.errors)
               })
             },
+
 
 
           }

@@ -10,7 +10,7 @@ class SendController extends Controller
   public function __construct(){
     $this->middleware('jwt.auth');
   }
-  
+
   public function checkUserKey(Request $request){
 
     $key = $request->key;

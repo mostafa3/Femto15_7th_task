@@ -36,6 +36,7 @@ class ApiAuthController extends Controller{
         }
         return response()->json([
           'auth' => $this->respondWithToken($token),
+          'api_key' => Auth::user()->key(),
         ],200);
     }
 

@@ -83,14 +83,15 @@ const axios = require('axios');
 
       data(){
         return {
-          key: '',
+          key: localStorage.getItem('key'),
           errors: new Errors,
         }
       },
 
-      mounted(){
-        console.log(localStorage.getItem(token));
-      },
+        mounted (){
+          this.redirectIfGuest();
+        },
+        
           methods:{
 
             saveUserKey(key){
@@ -102,7 +103,8 @@ const axios = require('axios');
                   'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }
               }).then( response => {
-                console.log(response.data.api_key);
+                this.$router.push({ path: 'pairs' });
+                localStorage.setItem('key', response.data.api_key);
               })
               .catch( error => {
                 console.log(error.response);

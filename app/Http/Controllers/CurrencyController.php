@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\Currency;
-use ValidKey;
-
+use validKey;
+use App\User;
 
 class CurrencyController extends Controller
 {
 
   public function __construct(){
     $this->middleware('jwt.auth');
+    $this->middleware('validKey');
   }
 
     public function getRates($pairs){
@@ -34,12 +35,16 @@ class CurrencyController extends Controller
     }
 
     public function getPairs(){
-      $user = Auth::user();
-      $pairs = $user->with(['source_currencies','to_currencies'])->first();
-      $pairs = $pairs->only(['source_currencies','to_currencies']);
+      $user = User::where('id',Auth::id())->with(['source_currencies','to_currencies'])->first();
+      // $user = Auth::user();
+// return $user;
 
+      $pairs = [
+        'source_currencies' =>  $user->source_currencies,
+        'to_currencies'     =>  $user->to_currencies,
+      ];
 
-      if($pairs)
+      if($pairs['source_currencies'])
         $pairs['rates'] = $this->getRates($pairs);
 
       return response()->json($pairs);
