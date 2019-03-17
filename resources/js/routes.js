@@ -27,7 +27,11 @@ let routes =[
     path: '/add',
     component: require('./components/Add').default
   },
-  
+  {
+    path: '/edit',
+    component: require('./components/Edit').default
+  },
+
 
 ]
 

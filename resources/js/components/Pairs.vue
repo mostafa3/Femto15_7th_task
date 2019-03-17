@@ -9,7 +9,7 @@
     </div>
 
     <router-link :to="{ path: 'add'}">New Pair</router-link>
-    
+
     <table class="table" v-if="pairs.hasOwnProperty('source_currencies')">
       <thead>
         <tr>
@@ -27,7 +27,9 @@
           <td>
             {{source_currency['id']}} - {{pairs['to_currencies'][index]['id']}}
 
-            Edit - Delete
+            {{source_currency['id']}} - {{pairs['to_currencies'][index]['id']}}
+            <router-link :to="{ path: '/edit?source=' + source_currency['id'] + '&to=' + pairs['to_currencies'][index]['id'] }">Edit</router-link>
+             - Delete
 
           </td>
         </tr>
